@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AuthManager;
+use App\Http\Controllers\TodoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,16 +18,32 @@ use App\Http\Controllers\ProductController;
 
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return redirect()->route('todos.index');
+})->name('home');
+
 
 Route::get('/phpmyadmin', function () {
     return redirect('http://localhost:8001');
 });
 
-route::get('/product', [ProductController::class, 'index'])->name('product.index');
-route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
-route::post('/product', [ProductController::class, 'store'])->name('product.store');
-route::get('/product/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
-route::put('/product/{product}/update', [ProductController::class, 'update'])->name('product.update');
-route::delete('/product/{product}/destroy', [ProductController::class, 'destroy'])->name('product.destroy');
+Route::get('/login', [AuthManager::class, 'login'])->name('login');
+Route::post('/login', [AuthManager::class, 'loginPost'])->name('login.post');
+Route::get('/registration', [AuthManager::class, 'registration'])->name('registration');
+Route::post('/registration', [AuthManager::class, 'registrationPost'])->name('registration.post');
+Route::get('/logout', [AuthManager::class, 'logout'])->name('logout');
+// Route::group(['middleware' => 'auth'], function (){
+//     Route::get('profile', function(){
+//         return "Hi";
+//     });
+// });
+
+Route::prefix('todos')->as('todos.')->controller(TodoController::class)->group(function(){
+    Route::get('index',[TodoController::class, 'index'])->name('index');
+    Route::get('create',[TodoController::class, 'create'])->name('create');
+    Route::post('store',[TodoController::class, 'store'])->name('store');
+    Route::get('show/{id}',[TodoController::class, 'show'])->name('show');
+    Route::get('{id}/edit', [TodoController::class, 'edit'])->name('edit');
+    Route::put('update',[TodoController::class, 'update'])->name('update');
+    Route::delete('destroy',[TodoController::class, 'destroy'])->name('destroy');
+});
+    
