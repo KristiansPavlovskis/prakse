@@ -18,8 +18,8 @@ use App\Http\Controllers\TodoController;
 
 
 Route::get('/', function () {
-    return redirect()->route('todos.index');
-})->name('home');
+    return redirect()->route('login');
+});
 
 
 Route::get('/phpmyadmin', function () {
@@ -36,7 +36,6 @@ Route::get('/logout', [AuthManager::class, 'logout'])->name('logout');
 //         return "Hi";
 //     });
 // });
-
 Route::prefix('todos')->as('todos.')->controller(TodoController::class)->group(function(){
     Route::get('index',[TodoController::class, 'index'])->name('index');
     Route::get('create',[TodoController::class, 'create'])->name('create');
@@ -44,6 +43,7 @@ Route::prefix('todos')->as('todos.')->controller(TodoController::class)->group(f
     Route::get('show/{id}',[TodoController::class, 'show'])->name('show');
     Route::get('{id}/edit', [TodoController::class, 'edit'])->name('edit');
     Route::put('update',[TodoController::class, 'update'])->name('update');
-    Route::delete('destroy',[TodoController::class, 'destroy'])->name('destroy');
+    Route::delete('{id}/destroy', [TodoController::class, 'destroy'])->name('destroy');
 });
+
     

@@ -32,12 +32,13 @@
                     <a class="btn btn-lg btn-secondary  mx-auto mb-3" href="{{route('todos.create')}}">Create Todo</a>
 
                     @if(count($todos) > 0)
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="app">
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th>Title</th>
                                     <th>Description</th>
                                     <th>Completed</th>
+                                    <th>priority</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -53,16 +54,24 @@
                                                 <span class="badge bg-danger">Not Completed</span>
                                             @endif
                                         </td>
+                                        <td>
+                                        @if ($todo->priority == 1)
+                                                <span class="badge bg-info">medium</span>
+                                        @elseif ($todo->priority == 0)
+                                                <span class="badge bg-success">low</span>
+                                            @else
+                                                <span class="badge bg-danger">high</span>
+                                            @endif
+                                        </td>
                                         <td class="d-flex">
-                                            <form action="{{ route('todos.destroy') }}" method="post">
-                                                @csrf
-                                                <a href="{{ route('todos.show', $todo->id) }}" class="me-3"><i class="fas fa-eye text-success fa-lg"></i></a>
-                                                <a href="{{ route('todos.edit', $todo->id) }}" class="me-3"><i class="fas fa-edit text-info fa-lg"></i></a>
-                                                <input type="hidden" name="todo_id" value="{{ $todo->id }}">
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-link text-danger"><i class="fas fa-trash-alt fa-lg"></i></button>
+                                        <a class="btn btn-sm btn-info" href="{{route('todos.edit', $todo->id)}}">Edit</a>
+                                            <form method="post" class="inline-block" action="{{ route('todos.destroy', $todo->id) }}">
+                                                @csrf 
+                                                <todo-list :todo-id="{{ $todo->id }}" class="btn btn-danger"></todo-list>
                                             </form>
                                         </td>
+
+
                                     </tr>
                                     
                                 @endforeach
@@ -76,4 +85,7 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+    <script src="{{ mix('js/app.js') }}"></script>
 @endsection

@@ -5,32 +5,37 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TodoRequest;
 use App\Models\Todo;
+use Illuminate\Support\Facades\Auth;
+
 
 class TodoController extends Controller
 {
     public function index(){
-        $todos = Todo::all();
+        $user = Auth::user();
+        $todos = $user->todos()->get();
         return view('todos.index', [
             'todos' => $todos
-            
         ]);
     }
+
     
     public function create(){
         return view('todos.create');
     }
     public function store(TodoRequest $request){
-        //$request->validated();
-         Todo::create([
+        $user = Auth::user();
+        $user->todos()->create([
             'title' => $request->title,
             'description' =>$request->description,
-            'is_completed' => 0
-         ]);
-         
-         $request->session()->flash('alert-success', 'Todo Created Successfully');
+            'is_completed' => 0,
+            'priority' => 0
+        ]);
+        $todos = Todo::all();
+        $request->session()->flash('alert-success', 'Todo Created Successfully');
     
-         return redirect()->route('todos.index'); 
+        return redirect()->route('todos.index'); 
     }
+    
     public function show($id){
         $todo = Todo::find($id);
         if(! $todo){
@@ -63,22 +68,53 @@ class TodoController extends Controller
         $todo->update([
             'title' =>$request->title,
             'description' =>$request->description,
-            'is_completed' =>$request->is_completed
+            'is_completed' =>$request->is_completed,
+            'priority' =>$request->priority
         ]);
         $request->session()->flash('alert-info', 'Todo Updated Successfully');
         return redirect()->route('todos.index');
     }
 
-    public function destroy(Request $request){
-        $todo = Todo::find($request->todo_id);
-        if(! $todo){
-            request()->session()->flash('error', 'Unable to locate the Todo');
-            return to_route('todos.index')->withErrors([
-                'error'=> 'Unable to locate the Todo'
-            ]);
+    // public function destroy(Request $request){
+    //     $todo = Todo::find($request->todo_id);
+    //     if(! $todo){
+    //         request()->session()->flash('error', 'Unable to locate the Todo');
+    //         return to_route('todos.index')->withErrors([
+    //             'error'=> 'Unable to locate the Todo'
+    //         ]);
+    //     }
+    //     $todo->delete();
+    //     $request->session()->flash('alert-success', 'Todo Deleted Successfully');
+    //     return redirect()->route('todos.index');
+    // }
+    public function destroy($id)
+    {
+        $todo = Todo::find($id);
+        if ($todo) {
+            $todo->delete();
+    
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Todo ir veiksmīgi izdzēsts',
+                ], 200);
+            }
+    
+            return redirect()->route('todos.index');
+        } else {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Todo id nav atrasts',
+                ], 404);
+            }
+    
+            return back()->withErrors(['error' => 'Unable to locate the Todo']);
         }
-        $todo->delete();
-        $request->session()->flash('alert-success', 'Todo Deleted Successfully');
-        return redirect()->route('todos.index');
     }
+    
+
+    
+
+    
 }

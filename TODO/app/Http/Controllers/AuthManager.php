@@ -43,6 +43,7 @@ class AuthManager extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
+            'email_confirmation' => 'required|same:email',
             'password' => 'required'
         ]);
 
@@ -50,6 +51,7 @@ class AuthManager extends Controller
         $data['email'] = $request->email;
         $data['password'] = Hash::make($request->password);
         $user = User::create($data);
+        
         if(!$user){
             return redirect(route('registration'))->with("error", "Registration failed, try again.");
         }

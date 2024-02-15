@@ -27,9 +27,13 @@
              
             </div>
             <div class="mb-3">
-             <label   class="form-label fs-5">Email address</label>
+             <label class="form-label fs-5">Email address</label>
              <input type="email" class="form-control fs-6" name="email" placeholder="example@example.com">
                
+            </div>
+            <div class="mb-3">
+                <label for="email_confirmation" class="form-label fs-5">Confirm Email address</label>
+                <input id="email_confirmation" type="email" class="form-control fs-6" name="email_confirmation" placeholder="example@example.com" >
             </div>
              <div class="mb-3">
                <label class="form-label fs-5">Password</label>

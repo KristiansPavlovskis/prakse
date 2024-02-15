@@ -25,9 +25,18 @@
                         <div class="mb-3">
                             <label for="">Status</label>
                             <select name="is_completed" class="form-control">
-                                <option disabled selected>Select Option</option>
+                                <option disabled >Select Option</option>
                                 <option value="1">Completed</option>
-                                <option value="0">Not Completed</option>
+                                <option value="0" selected>Not Completed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="">priority</label>
+                            <select name="priority" class="form-control">
+                                <option disabled >Select Option</option>
+                                <option value="2">high</option>
+                                <option value="1">medium</option>
+                                <option value="0" selected>low</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary bg-slate-500 border-none">Update</button>
