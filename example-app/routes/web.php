@@ -46,4 +46,9 @@ Route::prefix('todos')->as('todos.')->controller(TodoController::class)->group(f
     Route::delete('{id}/destroy', [TodoController::class, 'destroy'])->name('destroy');
 });
 
-    
+Route::group(['middleware' => ['ensure.auth']], function () {
+    Route::get('todos/create', [TodoController::class, 'create'])->name('todos.create');
+    Route::post('todos/store', [TodoController::class, 'store'])->name('todos.store');
+    Route::get('todos/{id}/edit', [TodoController::class, 'edit'])->name('todos.edit');
+    Route::get('todos/index', [TodoController::class, 'index'])->name('todos.index');
+});

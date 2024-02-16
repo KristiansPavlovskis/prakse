@@ -9,7 +9,6 @@
                 <div class="card-header bg-secondary text-white">
                     <h2 class="mb-0">{{ __('Todo Saraksts')}}</h2>
                 </div>
-
                 <div class="card-body">
                     @if (Session::has('alert-success'))
                         <div class="alert alert-success" role="alert">
@@ -30,7 +29,10 @@
                     @endif
 
                     <a class="btn btn-lg btn-secondary  mx-auto mb-3" href="{{route('todos.create')}}">Create Todo</a>
-
+                    <a class="btn btn-lg btn-secondary float-right mb-3" href="#">
+                        <i class="fa-solid fa-share"></i> Share
+                    </a>
+            <!-- Šeit arī if else priekš group, ja group nav tad pārējais nērādās un ja izveido group tad rādīsies tas no todos created yet -->
                     @if(count($todos) > 0)
                         <table class="table table-bordered" id="app">
                             <thead class="bg-primary text-white">
@@ -70,8 +72,6 @@
                                                 <todo-list :todo-id="{{ $todo->id }}" class="btn btn-danger"></todo-list>
                                             </form>
                                         </td>
-
-
                                     </tr>
                                     
                                 @endforeach
@@ -80,10 +80,15 @@
                     @else
                         <h4 class="mt-3">No todos are created yet.</h4>
                     @endif
+                    
                 </div>
             </div>
+            
         </div>
     </div>
+</div>
+<div style="position: fixed; right: 30px; bottom: 30px;">
+<a class="btn btn-lg btn-secondary text-xl px-6 py-3" href="#">Create Group</a>
 </div>
 @endsection
 @section('scripts')
