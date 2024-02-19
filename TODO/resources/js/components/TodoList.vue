@@ -1,5 +1,5 @@
 <template>
-  <button @click.prevent="deleteTodo" class="bg-red-500 btn btn-sm btn-danger">Dzēst</button>
+  <button @click.prevent="deleteTodo" class="bg-red-500 btn btn-sm btn-danger">Delete</button>
 
 </template>
 

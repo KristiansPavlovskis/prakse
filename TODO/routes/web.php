@@ -31,6 +31,11 @@ Route::post('/login', [AuthManager::class, 'loginPost'])->name('login.post');
 Route::get('/registration', [AuthManager::class, 'registration'])->name('registration');
 Route::post('/registration', [AuthManager::class, 'registrationPost'])->name('registration.post');
 Route::get('/logout', [AuthManager::class, 'logout'])->name('logout');
+
+Route::get('todos/createGroup', [TodoController::class, 'createGroup'])->name('todos.createGroup');
+Route::post('todos/createGroup', [TodoController::class, 'createGroupPost'])->name('todos.createGroupPost');
+Route::post('todos/storeGroup',[TodoController::class, 'storeGroup'])->name('todos.storeGroup');
+
 // Route::group(['middleware' => 'auth'], function (){
 //     Route::get('profile', function(){
 //         return "Hi";

@@ -6,21 +6,42 @@ use Illuminate\Http\Request;
 use App\Http\Requests\TodoRequest;
 use App\Models\Todo;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Group;
 
 
 class TodoController extends Controller
 {
-    public function index(){
-        $user = Auth::user();
-        $todos = $user->todos()->get();
-        return view('todos.index', [
-            'todos' => $todos
-        ]);
-    }
+    public function index()
+{
+    $user = Auth::user();
+    $todos = $user->todos()->get();
+    $groups = Group::all(); // Retrieve all groups
+    return view('todos.index', [
+        'todos' => $todos,
+        'groups' => $groups  // Pass $groups to the view
+    ]);
+}
+
 
     
-    public function create(){
-        return view('todos.create');
+    public function create()
+{
+    $group = Group::all();
+    if ($group->isEmpty()) { 
+        return redirect()->route('todos.createGroup');
+    }
+
+    return view('todos.create');
+}
+
+
+    public function createGroup(){
+        return view('todos.createGroup');
+    }
+    function createGroupPost(Request $request){
+        $request->validate([
+            'name' => 'required'
+        ]);
     }
     public function store(TodoRequest $request){
         $user = Auth::user();
@@ -35,6 +56,23 @@ class TodoController extends Controller
     
         return redirect()->route('todos.index'); 
     }
+    public function storeGroup(Request $request)
+{
+    $request->validate([
+        'name' => 'required'
+    ]);
+
+    $user = Auth::user();
+    $group = $user->groups()->create([
+        'name' => $request->name
+    ]);
+
+    $request->session()->flash('alert-success', 'Group Created Successfully');
+
+    return redirect()->route('todos.index');
+}
+
+
     
     public function show($id){
         $todo = Todo::find($id);

@@ -11,7 +11,8 @@
 
 </head>
 <body>
-    <div class="bg-[url('https://www.vandelaydesign.com/wp-content/uploads/what-the-hex.jpg')] opacity-60 fixed inset-0 z-0"></div>
+    <div id="app">
+    <div class="bg-[url('https://www.vandelaydesign.com/wp-content/uploads/what-the-hex.jpg')] opacity-60 fixed inset-0 z-0" ></div>
     <div class="relative z-10">
         @include('include.header')
         @yield('content')
@@ -20,5 +21,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
 </body>
 </html>
