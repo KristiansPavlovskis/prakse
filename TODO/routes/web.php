@@ -21,7 +21,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
 Route::get('/phpmyadmin', function () {
     return redirect('http://localhost:8001');
 });
@@ -35,13 +34,26 @@ Route::get('/logout', [AuthManager::class, 'logout'])->name('logout');
 Route::get('todos/createGroup', [TodoController::class, 'createGroup'])->name('todos.createGroup');
 Route::post('todos/createGroup', [TodoController::class, 'createGroupPost'])->name('todos.createGroupPost');
 Route::post('todos/storeGroup',[TodoController::class, 'storeGroup'])->name('todos.storeGroup');
+Route::delete('todos/groups/{id}/destroy', [TodoController::class, 'destroyGroup'])->name('todos.groups.destroy');
+Route::put('todos/update/{id}', [TodoController::class, 'update'])->name('todos.update');
+Route::post('todos/{id}/complete', [TodoController::class, 'complete'])
+    ->name('todos.complete')
+    ->withoutMiddleware(['csrf']);
+    
+Route::post('todos/update-priority/{id}', [TodoController::class, 'updatePriority'])->name('todos.updatePriority');
+Route::post('todos/{todoId}/share', [TodoController::class, 'shareTodoWithUser']);
+Route::post('todos/{todoId}/unshare', [TodoController::class, 'unshareTodoWithUser']);
 
-// Route::group(['middleware' => 'auth'], function (){
-//     Route::get('profile', function(){
-//         return "Hi";
-//     });
-// });
-Route::prefix('todos')->as('todos.')->controller(TodoController::class)->group(function(){
+
+
+
+
+
+
+
+
+
+Route::prefix('todos')->as('todos.')->group(function(){
     Route::get('index',[TodoController::class, 'index'])->name('index');
     Route::get('create',[TodoController::class, 'create'])->name('create');
     Route::post('store',[TodoController::class, 'store'])->name('store');

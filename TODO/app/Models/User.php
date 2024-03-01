@@ -53,4 +53,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Group::class);
     }
+    public function sharedTodos()
+{
+    return $this->belongsToMany(Todo::class, 'todo_user');
+}
+
 }

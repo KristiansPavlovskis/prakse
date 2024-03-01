@@ -7,8 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     @vite('resources/css/app.css')
-    @vite('resources/js/app.js')
-
 </head>
 <body>
     <div id="app">
@@ -17,10 +15,11 @@
         @include('include.header')
         @yield('content')
     </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </div>
+    @vite('resources/js/app.js')
 </body>
 </html>

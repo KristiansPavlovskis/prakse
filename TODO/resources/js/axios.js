@@ -3,11 +3,10 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost', // Adjust base URL as needed
+  baseURL: 'http://localhost',
   withCredentials: true,
 });
 
-// Add a request interceptor to include the authorization token in all requests
 instance.interceptors.request.use(
   (config) => {
     const authToken = localStorage.getItem('authToken');

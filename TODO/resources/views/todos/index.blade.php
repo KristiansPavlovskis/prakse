@@ -8,42 +8,40 @@
         <div class="col-md-8">
             <div class="card">
             <div class="card-header bg-secondary text-white">
-                @if($groups->isNotEmpty())
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
                         <h2 class="mb-0">{{ $group->name }}</h2>
-                   
-                @else
-                    <h2 class="mb-0">No groups are created yet.</h2>
-                @endif
+                    </div>
+                    <div>
+                    <counter :group-id="{{ $group->id }}"></counter>
+                    </div>
+                </div>
+                
+                  
             </div>
 
-                <div class="card-body">
-                    @if (Session::has('alert-success'))
-                        <div class="alert alert-success" role="alert">
-                            {{ Session::get('alert-success')}}
-                        </div>
+
+            <div class="card-body">
+                    @if(Session::has('alert-success-' . $group->id)) <!-- Adjust the session key -->
+                    <div class="alert alert-success" role="alert">
+                        {{ Session::get('alert-success-' . $group->id) }}
+                    </div>
                     @endif
 
-                    @if (Session::has('alert-info'))
-                        <div class="alert alert-info" role="alert">
-                            {{ Session::get('alert-info')}}
-                        </div>
+                    <!-- Display delete notification -->
+                    @if(Session::has('alert-delete-' . $group->id))
+                    <div class="alert alert-info" role="alert">
+                        {{ Session::get('alert-delete-' . $group->id) }}
+                    </div>
                     @endif
 
-                    @if (Session::has('error'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ Session::get('error')}}
-                        </div>
-                    @endif
-                     <!-- Šeit arī if else priekš group, ja group nav tad pārējais nērādās un ja izveido group tad rādīsies tas no todos created yet -->
-                     @if(count($groups) > 0)
-                     
-                        <a class="btn btn-lg btn-secondary  mx-auto mb-3" href="{{route('todos.create')}}">Create Todo</a>
+               
+
+                    <a class="btn btn-lg btn-secondary  mx-auto mb-3" href="{{route('todos.create')}}">Create Todo</a>
                     
-                    <a class="btn btn-lg btn-secondary float-right mb-3" href="#">
-                        <i class="fa-solid fa-share"></i> Share
-                    </a> 
-                    @if(count($todos) > 0)
-                        <table class="table table-bordered" id="app">
+                    @if($group->todos && $group->todos->isNotEmpty()) 
+                        
+                        <table class="table table-bordered">
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th>Title</th>
@@ -51,50 +49,40 @@
                                     <th>Completed</th>
                                     <th>priority</th>
                                     <th>Actions</th>
+                                    <th>Share</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($todos as $todo)
+                                @foreach ($group->todos as $todo)
                                     <tr>
                                         <td>{{ $todo->title }}</td>
                                         <td>{{ $todo->description }}</td>
                                         <td>
-                                            @if ($todo->is_completed == 1)
-                                                <span class="badge bg-success">Completed</span>
-                                            @else
-                                                <span class="badge bg-danger">Not Completed</span>
-                                            @endif
+                                        <completion :todo-id="{{ $todo->id }}" :initial-completed="{{ $todo->is_completed ? 'true' : 'false' }}" :todo="{{ json_encode($todo) }}"></completion>
                                         </td>
                                         <td>
-                                        @if ($todo->priority == 1)
-                                                <span class="badge bg-info">medium</span>
-                                        @elseif ($todo->priority == 0)
-                                                <span class="badge bg-success">low</span>
-                                            @else
-                                                <span class="badge bg-danger">high</span>
-                                            @endif
+                                        <priority :todo-id="{{ $todo->id }}" :initial-priority="{{ $todo->priority }}" :todo="{{ json_encode($todo) }}"></priority>
                                         </td>
+                                        
                                         <td class="d-flex" id="app">
-                                        <a class="btn btn-sm btn-info" href="{{route('todos.edit', $todo->id)}}">Edit</a>
+                                            <a class="btn btn-sm btn-info" href="{{route('todos.edit', $todo->id)}}">Edit</a>
                                             <form method="post" class="inline-block" action="{{ route('todos.destroy', $todo->id) }}">
                                                 @csrf 
                                                 <todo-list :todo-id="{{ $todo->id }}"></todo-list>
                                             </form>
                                         </td>
+                                        <td>
+                                            <share :todo-id="{{ $todo->id }}" :group-id="{{ $group->id }}" ></share>
+                                        </td>
                                     </tr>
-                                    
                                 @endforeach
                             </tbody>
                         </table>
                     @else
                         <h4 class="mt-3">No todos are created yet.</h4>
                     @endif
-                    @endif
-                    
                 </div>
-                
             </div>
-            
         </div>
     </div>
 </div>
@@ -103,6 +91,7 @@
 <a class="btn btn-lg btn-secondary text-xl px-6 py-3" href="{{route('todos.createGroup')}}">Create Group</a>
 </div>
 @endsection
+
 @section('scripts')
     <script src="{{ mix('js/app.js') }}"></script>
 @endsection

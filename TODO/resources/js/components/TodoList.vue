@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     deleteTodo() {
-      const confirmed = window.confirm('Tiešām gribi izdzēst TODO?');
+      const confirmed = window.confirm('Do you really want to delete your TODO?');
       if (confirmed) {
         axios
           .delete(`http://localhost/todos/${this.todoId}/destroy`)

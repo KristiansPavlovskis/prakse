@@ -28,6 +28,18 @@
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" cols="5" rows="5"></textarea>
                         </div>
+                        <div class="mb-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="group_id">Group</label>
+                            <select name="group_id" class="form-control" id="group_id">
+                                <option value="" disabled>Select a group</option>
+                                @foreach($groups as $group)
+                                    <option selected value="{{ $group->id }}">{{ $group->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
                         <button type="submit" class="btn btn-primary bg-slate-500 border-none" >Submit</button>
                     </form>
 
